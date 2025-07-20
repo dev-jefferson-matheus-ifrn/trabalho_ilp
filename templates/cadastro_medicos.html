@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro medicos</title>
+</head>
+<body>
+    <form method="POST">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome">
+        <label for="especialidades">especialidades clinica</label>
+        <select name="especialidades" id="especialidades">
+            {% for especialidade in especialidades %}
+                <option value="{{ especialidade }}">{{ especialidade }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Cadastrar</button>
+    </form>
+</body>
+</html>
