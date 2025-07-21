@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>deletar especialidade</title>
+    <style>
+    table, th, td {
+        border:1px solid black;
+    }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>Especialidade</th>
+            <th>deletar</th>
+        </tr>
+        {% for especialidade in especialidades %}
+        <tr>
+            
+            <td>{{especialidade}}</td>
+            <td>
+                <form action="{{url_for('deletar_especialidade.deletar_especialidade', nome=especialidade)}}" method="POST">
+                    <button type="submit">Deletar</button>
+                </form>
+            </td>
+            
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
