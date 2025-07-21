@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro horarios</title>
+</head>
+<body>
+    <form method="POST">
+        <label for="tempo">horario:</label>
+        <input type="time" name="tempo" id="tempo">
+        <select name="medicos" id="medicos">
+            {% for medico in medicos %}
+                <option value="{{ medico }}">{{ medico }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Cadastrar</button>
+    </form>
+</body>
+</html>
