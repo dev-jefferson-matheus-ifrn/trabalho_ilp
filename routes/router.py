@@ -13,6 +13,8 @@ cadastro_medicos_blue_print = Blueprint("cadastro_medicos", __name__ )
 cadastro_horarios_blue_print = Blueprint("cadastro_horarios", __name__ )
 listar_especialidades_blue_print = Blueprint("listar_especialidades", __name__ )
 deletar_especialidade_blue_print = Blueprint("deletar_especialidade", __name__ )
+atualizar_especialidade_blue_print = Blueprint("atualizar_especialidade", __name__ )
+atualizar_especialidade_form_blue_print = Blueprint("atualizar_especialidade_form", __name__ )
 
 @home_blue_print.route("/")
 def home_page():
@@ -24,7 +26,7 @@ def cadastro_especialidade_page():
     if request.method == "POST":
         especialidade = request.form.get("especialidade")
         with open(caminho_tabela_especialidades, "a", newline= "") as arquivo:
-            escritor = csv.writer(arquivo,delimiter=",")
+            escritor = csv.writer(arquivo,delimiter=',')
             escritor.writerow([especialidade])
     return render_template("cadastro_especialidade.html")
 
@@ -90,7 +92,7 @@ def deletar_especialidade_pagina():
         especialidades = []
         csv_reader = csv.reader(arquivo)
 
-        
+        next(csv_reader)
 
         for linha in csv_reader:
             if linha[0] != "especialidades":
@@ -112,8 +114,46 @@ def deletar_especialidade(nome):
                 especialidades.append(linha[0])
     
     with open(caminho_tabela_especialidades, "w", newline="", encoding="utf-8") as arquivo:
-        csv_writer = csv.writer(arquivo, delimiter=',')
+        csv_writer = csv.writer(arquivo)
         csv_writer.writerow(filds)
-        csv_writer.writerow(especialidades)
+        for especialidade in especialidades:
+            csv_writer.writerow([especialidade])
 
     return redirect(url_for("deletar_especialidade.deletar_especialidade_pagina"))
+
+@atualizar_especialidade_blue_print.route("/atualizacao_especialidades")
+def atualizar_especialiade_pagina():
+    with open(caminho_tabela_especialidades, "r", newline="") as arquivo:
+        especialidades = []
+        csv_reader = csv.reader(arquivo)
+
+        next(csv_reader)
+
+        for linha in csv_reader:
+            especialidades.append(linha[0])
+
+    return render_template("lista_especialiades_atualizar.html", especialidades=especialidades)
+
+
+@atualizar_especialidade_form_blue_print.route("/atualizar_especialidade_form/<nome>", methods = ["GET","POST"])
+def atualizar_especialidade(nome):
+    if request.method == "POST":
+        nova_especialidade = request.form.get("nova_especialidade")
+        with open(caminho_tabela_especialidades, "r", newline="") as arquivo:
+            especialidades = []
+            csv_reader = csv.DictReader(arquivo)
+
+            for linha in csv_reader:
+                if linha["especialidades "] == nome:
+                    linha["especialidades "] = nova_especialidade
+
+                especialidades.append(linha)
+
+        with open(caminho_tabela_especialidades, "w", newline="") as arquivo:
+            csv_writer = csv.DictWriter(arquivo, fieldnames=["especialidades "])
+
+            csv_writer.writeheader()
+
+            for especialidade in especialidades:
+                csv_writer.writerow(especialidade)
+    return render_template("atualizar_especialidade.html")

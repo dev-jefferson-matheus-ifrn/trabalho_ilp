@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Especialidade - Clínica Saúde & Bem-Estar</title>
+    <title>Atualizar Especialidades - Clínica Saúde & Bem-Estar</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
@@ -13,13 +13,14 @@
             --secondary-color: #6c757d; /* Cinza padrão do Bootstrap */
             --light-bg: #f8f9fa; /* Fundo mais claro */
             --dark-text: #343a40; /* Texto escuro */
+            --warning-color: #ffc107; /* Amarelo padrão do Bootstrap */
         }
 
         body {
             font-family: 'Open Sans', sans-serif;
             background-color: var(--light-bg);
             color: var(--dark-text);
-            min-height: 100vh; /* Garante que o body ocupe toda a altura */
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
@@ -33,52 +34,37 @@
             margin-right: 10px;
         }
 
-        .form-container {
-            background-color: white; /* Fundo branco para o formulário */
-            padding: 2.5rem; /* Espaçamento interno */
-            border-radius: 10px; /* Bordas arredondadas */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Sombra mais pronunciada */
-            width: 100%; /* Largura total em telas pequenas */
-            max-width: 500px; /* Largura máxima para telas maiores */
-            margin: auto; /* Centraliza o contêiner na página */
-            flex-grow: 1; /* Permite que o contêiner ocupe espaço disponível */
-            display: flex; /* Para centralizar o conteúdo verticalmente se necessário */
-            flex-direction: column;
-            justify-content: center; /* Centraliza o conteúdo verticalmente */
+        main {
+            flex-grow: 1; /* Permite que o conteúdo principal ocupe o espaço restante */
         }
 
-        .form-container h2 {
-            color: var(--primary-color);
-            margin-bottom: 2rem;
+        .section-header {
+            margin-bottom: 3rem;
+        }
+
+        .table-responsive {
+            margin-top: 2rem;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f2f2f2; /* Leve destaque ao passar o mouse */
+        }
+
+        .empty-state {
             text-align: center;
+            padding: 50px 0;
+            color: var(--secondary-color);
         }
 
-        .form-label {
-            font-weight: bold;
-            color: var(--dark-text);
-        }
-
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            transition: background-color 0.2s ease, border-color 0.2s ease;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3; /* Tom mais escuro no hover */
-            border-color: #0056b3;
+        .empty-state .btn {
+            margin-top: 20px;
         }
 
         footer {
             background-color: var(--dark-text);
             color: white;
             padding: 30px 0;
-            margin-top: auto; /* Empurra o rodapé para o final da página */
+            margin-top: 50px;
         }
 
         footer a {
@@ -112,9 +98,6 @@
                         <a class="nav-link" href="/admin-dashboard">Área Administrativa</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{url_for('cadastro_especialidade.cadastro_especialidade_page')}}">Cadastrar Especialidade</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="btn btn-primary ms-lg-3" href="#">Agendar Consulta</a>
                     </li>
                 </ul>
@@ -122,21 +105,48 @@
         </div>
     </nav>
 
-    <main class="d-flex flex-grow-1 align-items-center justify-content-center">
-        <div class="form-container">
-            <h2 class="mb-4">Cadastrar Nova Especialidade</h2>
-            <form method="POST">
-                <div class="mb-3">
-                    <label for="especialidade" class="form-label">Nome da Especialidade:</label>
-                    <input type="text" class="form-control" name="especialidade" id="especialidade"
-                        placeholder="Ex: Cardiologia" required>
-                </div>
-                <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary btn-lg">Cadastrar Especialidade</button>
-                    <a href="/admin-dashboard" class="btn btn-outline-secondary">Voltar ao Dashboard</a>
-                </div>
-            </form>
+    <main class="container my-5">
+        <div class="section-header text-center">
+            <h1 class="display-4 fw-bold mb-3 text-primary">Atualizar Especialidades</h1>
+            <p class="lead">Visualize e edite as especialidades cadastradas no sistema.</p>
         </div>
+
+        {% if especialidades %}
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">Especialidade</th>
+                            <th scope="col" class="text-center">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for especialidade in especialidades %}
+                            <tr>
+                                <td>{{ especialidade }}</td>
+                                <td class="text-center">
+                                    <a href="{{url_for('atualizar_especialidade_form.atualizar_especialidade', nome=especialidade)}}" 
+                                       class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit me-1"></i> Editar
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center mt-4">
+                <a href="/admin-dashboard" class="btn btn-outline-secondary">Voltar ao Dashboard</a>
+                <a href="{{url_for('cadastro_especialidade.cadastro_especialidade_page')}}" class="btn btn-primary ms-2">Cadastrar Nova Especialidade</a>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <p class="lead">Nenhuma especialidade disponível para atualização.</p>
+                <p>Para atualizar uma especialidade, primeiro você precisa cadastrá-la.</p>
+                <a href="{{url_for('cadastro_especialidade.cadastro_especialidade_page')}}" class="btn btn-primary btn-lg">Cadastrar Nova Especialidade</a>
+                <a href="/admin-dashboard" class="btn btn-link mt-3">Voltar ao Dashboard Administrativo</a>
+            </div>
+        {% endif %}
     </main>
 
     <footer class="text-center">
