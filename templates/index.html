@@ -132,9 +132,9 @@
                         <p class="card-text">Cadastre, edite e visualize informações de médicos.</p>
                         <div class="d-grid gap-2">
                             <a href="{{url_for('cadastro_medicos.cadastrar_medico')}}" class="btn btn-primary">Cadastrar Médico</a>
-                            <button class="btn btn-outline-secondary" disabled>Listar Médicos (Em breve)</button>
-                            <button class="btn btn-outline-warning" disabled>Editar Médico (Em breve)</button>
-                            <button class="btn btn-outline-danger" disabled>Deletar Médico (Em breve)</button>
+                            <a href="{{url_for('listagem_medicos.listar_medicos_pagina')}}" class="btn btn-primary">Listar Médicos</a>
+                            <a href="{{url_for('edicao_medicos.edicao_medico_pagina')}}" class="btn btn-primary">Editar Médico</a>
+                            <a href="{{url_for('exclusao_medico.excluir_medico_pagina')}}" class="btn btn-primary">Excluir Médico</a>
                         </div>
                     </div>
                 </div>
