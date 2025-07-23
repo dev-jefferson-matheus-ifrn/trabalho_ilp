@@ -9,7 +9,6 @@ caminho_tabela_horarios = "db_tables/tb_horatios.csv"
 home_blue_print = Blueprint("home", __name__ )
 cadastro_especialidade_blue_print = Blueprint("cadastro_especialidade", __name__ )
 home_blue_print = Blueprint("home", __name__ )
-cadastro_medicos_blue_print = Blueprint("cadastro_medicos", __name__ )
 cadastro_horarios_blue_print = Blueprint("cadastro_horarios", __name__ )
 listar_especialidades_blue_print = Blueprint("listar_especialidades", __name__ )
 deletar_especialidade_blue_print = Blueprint("deletar_especialidade", __name__ )
@@ -28,27 +27,7 @@ def cadastro_especialidade_page():
         with open(caminho_tabela_especialidades, "a", newline= "") as arquivo:
             escritor = csv.writer(arquivo,delimiter=',')
             escritor.writerow([especialidade])
-    return render_template("cadastro_especialidade.html")
-
-
-@cadastro_medicos_blue_print.route("/cadastro_medicos" , methods=['GET','POST'])
-def cadastrar_medico():
-    with open(caminho_tabela_especialidades, "r", newline="", encoding="utf-8") as arquivo:
-        especialidades = []
-        for linha in csv.reader(arquivo):
-            if linha[0] != "especialidades":
-                especialidades.append(linha[0])
-
-    if request.method == "POST":
-        nome_medico = request.form.get("nome")
-        especialidade = request.form.get("especialidades")
-        with open(caminho_tabela_medicos, "a", newline= "", encoding= "utf-8") as arquivo:
-            escritor = csv.writer(arquivo)
-            escritor.writerow([nome_medico,especialidade])
-
-
-
-    return render_template("cadastro_medicos.html", especialidades=especialidades)
+    return render_template("/especialidades/cadastro_especialidade.html")
 
 
 @cadastro_horarios_blue_print.route("/cadastro_horarios", methods=["GET", "POST"])
@@ -83,7 +62,7 @@ def listar_especialidades_pagina():
         for linha in csv_reader:
             especialidades.append(linha[0])
 
-    return render_template("lista_especialidades.html", especialidades=especialidades)
+    return render_template("especialidades/lista_especialidades.html", especialidades=especialidades)
 
 
 @deletar_especialidade_blue_print.route("/deletar_especialidade", methods = ["GET", "POST"])
@@ -98,7 +77,7 @@ def deletar_especialidade_pagina():
             if linha[0] != "especialidades":
                 especialidades.append(linha[0])
     
-    return render_template("deletar_especialidade.html", especialidades=especialidades)
+    return render_template("especialidades/deletar_especialidade.html", especialidades=especialidades)
 
 
 @deletar_especialidade_blue_print.route("/deletar_especialidade/<nome>", methods = ["POST"])
@@ -132,7 +111,7 @@ def atualizar_especialiade_pagina():
         for linha in csv_reader:
             especialidades.append(linha[0])
 
-    return render_template("lista_especialiades_atualizar.html", especialidades=especialidades)
+    return render_template("especialidades/lista_especialiades_atualizar.html", especialidades=especialidades)
 
 
 @atualizar_especialidade_form_blue_print.route("/atualizar_especialidade_form/<nome>", methods = ["GET","POST"])
@@ -156,4 +135,4 @@ def atualizar_especialidade(nome):
 
             for especialidade in especialidades:
                 csv_writer.writerow(especialidade)
-    return render_template("atualizar_especialidade.html")
+    return render_template("especialidades/atualizar_especialidade.html")
